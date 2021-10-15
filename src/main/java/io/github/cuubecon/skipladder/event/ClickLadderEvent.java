@@ -1,5 +1,6 @@
 package io.github.cuubecon.skipladder.event;
 
+import io.github.cuubecon.skipladder.config.SkipLadderConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -218,7 +219,7 @@ public class ClickLadderEvent
             player.teleportTo(posL.getX()+0.5, posL.getY()+1.0, posL.getZ()+0.5);
 
 
-        if(!player.isCreative())
+        if(!player.isCreative() && SkipLadderConfig.remove_hunger.get())
             player.getFoodData().setFoodLevel(foodLevel - fooddecrease);
 
         world.playSound(null, posL, SoundEvents.ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 10, 1);
