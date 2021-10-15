@@ -1,6 +1,5 @@
 package io.github.cuubecon.skipladder.event;
 
-import io.github.cuubecon.skipladder.SkipLadder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -15,25 +14,34 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.ICollisionReader;
 import net.minecraft.world.World;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.Nullable;
 
 import static net.minecraft.block.HorizontalBlock.FACING;
 
-@SuppressWarnings("DuplicatedCode")
+/**
+ * Self-subscribing Event Class
+ *
+ * @author CubeCon
+ */
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ClickLadderEvent
 {
     private final static int[][] offsetArray = {{0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}, {-1,-1}, {-1,0}, {-1,1}};
 
+    /**
+     * Called every time the player right-clicks a Block.
+     *
+     * @param event RightClickBlockEvent
+     */
     @SubscribeEvent
-    public static void onBlocksRegistry(PlayerInteractEvent.RightClickBlock event) {
+    public static void onBlocksRightClick(PlayerInteractEvent.RightClickBlock event)
+    {
         World world = event.getWorld();
+
         if(!world.isClientSide)
        {
            BlockPos pos = event.getPos();
@@ -73,6 +81,7 @@ public class ClickLadderEvent
                }
                else
                    posL = posDOWN;
+
                int counter = 0;
 
                while(world.getBlockState(posL).getBlock().is(Blocks.LADDER))
@@ -83,6 +92,7 @@ public class ClickLadderEvent
                        lY = posL.getY()+1;
                    else
                        lY = posL.getY()-1;
+
                    posL = new BlockPos(posL.getX(),lY,posL.getZ());
                }
 
@@ -101,17 +111,20 @@ public class ClickLadderEvent
                     south = true;
                     posUP = new BlockPos(pos.getX(),pos.getY()+1,pos.getZ()+1);
                     posDOWN = new BlockPos(pos.getX(),pos.getY()-1,pos.getZ()-1);
-                }else if(state.getValue(FACING).getName().equals("north"))
+                }
+                else if(state.getValue(FACING).getName().equals("north"))
                 {
                     north = true;
                     posUP = new BlockPos(pos.getX(),pos.getY()+1,pos.getZ()-1);
                     posDOWN = new BlockPos(pos.getX(),pos.getY()-1,pos.getZ()+1);
-                }else if(state.getValue(FACING).getName().equals("east"))
+                }
+                else if(state.getValue(FACING).getName().equals("east"))
                 {
                     east = true;
                     posUP = new BlockPos(pos.getX()+1,pos.getY()+1,pos.getZ());
                     posDOWN = new BlockPos(pos.getX()-1,pos.getY()-1,pos.getZ());
-                }else if(state.getValue(FACING).getName().equals("west"))
+                }
+                else if(state.getValue(FACING).getName().equals("west"))
                 {
                     west = true;
                     posUP = new BlockPos(pos.getX()-1,pos.getY()+1,pos.getZ());
@@ -125,7 +138,7 @@ public class ClickLadderEvent
 
                if(world.getBlockState(posUP).getBlock().is(BlockTags.STAIRS) & world.getBlockState(posDOWN).getBlock().is(BlockTags.STAIRS))
                    return;
-              // StairsBlock
+
                if(world.getBlockState(posUP).getBlock().is(BlockTags.STAIRS))
                {
                    up = true;
@@ -149,7 +162,7 @@ public class ClickLadderEvent
                        else if(west)
                            lX = posL.getX()-1;
                        else if(east)
-                           lZ = posL.getX()+1;
+                           lX = posL.getX()+1;
                    }
                    else
                    {
@@ -161,7 +174,7 @@ public class ClickLadderEvent
                        else if(west)
                            lX = posL.getX()+1;
                        else if(east)
-                           lZ = posL.getX()-1;
+                           lX = posL.getX()-1;
                    }
 
 
@@ -177,31 +190,48 @@ public class ClickLadderEvent
 
     }
 
+    /**
+     * Teleport the player to a safe space, remove foodlevel when not in creative and play a teleport sound.
+     *
+     * @param world Minecraft world
+     * @param player Minecraft Player
+     * @param foodLevel Foodlevel of the player
+     * @param posL Position to teleport
+     * @param counter Distance in blocks, needed to calculate foodlevel amount to remove
+     */
     private static void teleportPlayer(World world, PlayerEntity player, int foodLevel, BlockPos posL, int counter) {
         if(counter > 150)
             counter = 150;
+
         int fooddecrease = (counter /10);
+
         if(fooddecrease >= foodLevel)
             fooddecrease = foodLevel -2;
+
         if(fooddecrease <=0)
             fooddecrease = 1;
-        System.out.println(fooddecrease + " " + counter);
+
         Vector3d targetblock = findSafeTeleportLocation(world, posL);
         if(targetblock != null)
-        {
-            System.out.println(targetblock.toString());
             player.teleportTo(targetblock.x, targetblock.y, targetblock.z);
-        }
         else
-        {
             player.teleportTo(posL.getX()+0.5, posL.getY()+1.0, posL.getZ()+0.5);
-        }
+
 
         if(!player.isCreative())
             player.getFoodData().setFoodLevel(foodLevel - fooddecrease);
+
         world.playSound(null, posL, SoundEvents.ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 10, 1);
     }
 
+    /**
+     * Find a safe location to teleport the player. Copy from {@link net.minecraft.block.BedBlock#findStandUpPositionAtOffset(EntityType, ICollisionReader, BlockPos, int[][], boolean)}
+     *
+     * @param world Minecraft World
+     * @param pos Startposition
+     * @return Vector3d or null if no location found
+     */
+    @Nullable
     private static Vector3d findSafeTeleportLocation(ICollisionReader world, BlockPos pos)
     {
 

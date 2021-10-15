@@ -5,7 +5,11 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
+/**
+ * The Main Class of the Mod
+ *
+ * @author CubeCon
+ */
 @Mod(SkipLadder.MODID)
 public class SkipLadder
 {
@@ -18,13 +22,4 @@ public class SkipLadder
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
-
-
-
-
-
-
-
-
-
 }
