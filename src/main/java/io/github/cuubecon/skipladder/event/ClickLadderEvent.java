@@ -5,7 +5,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -33,6 +36,7 @@ public class ClickLadderEvent
 {
     private final static int[][] offsetArray = {{0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}, {-1,-1}, {-1,0}, {-1,1}};
 
+
     /**
      * Called every time the player right-clicks a Block.
      *
@@ -49,9 +53,10 @@ public class ClickLadderEvent
            PlayerEntity player = event.getPlayer();
            int foodLevel = player.getFoodData().getFoodLevel();
            Iterable<ItemStack> stack = player.getHandSlots();
-
-           for (ItemStack itemstack : stack) {
-               if(!itemstack.isEmpty())
+          for (ItemStack itemstack : stack) {
+              System.out.println(itemstack.getItem() instanceof BlockItem);
+              System.out.println(itemstack.getItem() instanceof PotionItem);
+               if(isInvalidItem(itemstack.getItem()))
                    return;
            }
 
@@ -96,7 +101,6 @@ public class ClickLadderEvent
 
                    posL = new BlockPos(posL.getX(),lY,posL.getZ());
                }
-
                teleportPlayer(world, player, foodLevel, posL, counter);
            }
            else if(world.getBlockState(pos).getBlock().is(BlockTags.STAIRS))
@@ -184,7 +188,6 @@ public class ClickLadderEvent
                }
 
                teleportPlayer(world, player, foodLevel, posL, counter);
-
            }
        }
 
@@ -245,5 +248,21 @@ public class ClickLadderEvent
                 return vector3d;
         }
         return null;
+    }
+
+    /**
+     * Check if with this item in hand we can teleport a player without side effects
+     *
+     * @param item Minecraft Item in hand
+     * @return boolean
+     */
+    private static boolean isInvalidItem(Item item)
+    {
+        boolean test = false;
+        if(item instanceof BlockItem)
+            test = true;
+        else if(item instanceof PotionItem)
+            test = true;
+        return test;
     }
 }
