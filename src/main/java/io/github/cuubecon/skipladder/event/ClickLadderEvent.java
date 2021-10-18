@@ -3,6 +3,7 @@ package io.github.cuubecon.skipladder.event;
 import io.github.cuubecon.skipladder.config.SkipLadderConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.LadderBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -53,9 +54,9 @@ public class ClickLadderEvent
            PlayerEntity player = event.getPlayer();
            int foodLevel = player.getFoodData().getFoodLevel();
            Iterable<ItemStack> stack = player.getHandSlots();
-          for (ItemStack itemstack : stack) {
-              System.out.println(itemstack.getItem() instanceof BlockItem);
-              System.out.println(itemstack.getItem() instanceof PotionItem);
+
+          for (ItemStack itemstack : stack)
+          {
                if(isInvalidItem(itemstack.getItem()))
                    return;
            }
@@ -72,15 +73,21 @@ public class ClickLadderEvent
                BlockPos posL;
                double lookY_UP = pos.getY()+1;
                double lookY_DOWN = pos.getY()-1;
+               double lookY_UP2 = pos.getY()+2;
+               double lookY_DOWN2 = pos.getY()-2;
                boolean up = false;
 
                BlockPos posUP = new BlockPos(pos.getX(),lookY_UP,pos.getZ());
                BlockPos posDOWN = new BlockPos(pos.getX(),lookY_DOWN,pos.getZ());
 
-               if(world.getBlockState(posUP).getBlock().is(Blocks.LADDER) & world.getBlockState(posDOWN).getBlock().is(Blocks.LADDER))
+               BlockPos posUP2 = new BlockPos(pos.getX(),lookY_UP2,pos.getZ());
+               BlockPos posDOWN2 = new BlockPos(pos.getX(),lookY_DOWN2,pos.getZ());
+
+               if((world.getBlockState(posUP).getBlock().is(Blocks.LADDER) && world.getBlockState(posUP2).getBlock().is(Blocks.LADDER))
+                       & (world.getBlockState(posDOWN).getBlock().is(Blocks.LADDER) && world.getBlockState(posDOWN2).getBlock().is(Blocks.LADDER)))
                    return;
 
-               if(world.getBlockState(posUP).getBlock().is(Blocks.LADDER))
+               if(world.getBlockState(posUP).getBlock().is(Blocks.LADDER) & world.getBlockState(posUP2).getBlock().is(Blocks.LADDER))
                {
                    up = true;
                    posL = posUP;
