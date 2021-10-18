@@ -8,11 +8,13 @@ public class SkipLadderConfig
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> remove_hunger;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> play_teleportsound;
 
     static {
         BUILDER.push("Config for Skip Ladder Mod!");
 
         remove_hunger = BUILDER.comment("Should teleport cost hunger. Default: true").define("Remove hunger", true);
+        play_teleportsound = BUILDER.comment("Should play sound on teleport. Default: true").define("Play sound", true);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

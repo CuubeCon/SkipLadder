@@ -225,7 +225,8 @@ public class ClickLadderEvent
         if(!player.isCreative() && SkipLadderConfig.remove_hunger.get())
             player.getFoodData().setFoodLevel(foodLevel - fooddecrease);
 
-        world.playSound(null, posL, SoundEvents.ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 10, 1);
+        if(SkipLadderConfig.play_teleportsound.get())
+            world.playSound(null, posL, SoundEvents.ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 10, 1);
     }
 
     /**
