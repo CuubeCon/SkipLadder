@@ -116,6 +116,8 @@ public class ClickLadderEvent
                BlockState state = world.getBlockState(pos);
                BlockPos posUP = null;
                BlockPos posDOWN = null;
+               BlockPos posUP2 = null;
+               BlockPos posDOWN2 = null;
                boolean south, north, east, west;
                south = north = east = west = false;
                 if(state.getValue(FACING).getName().equals("south"))
@@ -123,24 +125,36 @@ public class ClickLadderEvent
                     south = true;
                     posUP = new BlockPos(pos.getX(),pos.getY()+1,pos.getZ()+1);
                     posDOWN = new BlockPos(pos.getX(),pos.getY()-1,pos.getZ()-1);
+
+                    posUP2 = new BlockPos(pos.getX(),pos.getY()+2,pos.getZ()+2);
+                    posDOWN2 = new BlockPos(pos.getX(),pos.getY()-2,pos.getZ()-2);
                 }
                 else if(state.getValue(FACING).getName().equals("north"))
                 {
                     north = true;
                     posUP = new BlockPos(pos.getX(),pos.getY()+1,pos.getZ()-1);
                     posDOWN = new BlockPos(pos.getX(),pos.getY()-1,pos.getZ()+1);
+
+                    posUP2 = new BlockPos(pos.getX(),pos.getY()+2,pos.getZ()-2);
+                    posDOWN2 = new BlockPos(pos.getX(),pos.getY()-2,pos.getZ()+2);
                 }
                 else if(state.getValue(FACING).getName().equals("east"))
                 {
                     east = true;
                     posUP = new BlockPos(pos.getX()+1,pos.getY()+1,pos.getZ());
                     posDOWN = new BlockPos(pos.getX()-1,pos.getY()-1,pos.getZ());
+
+                    posUP2 = new BlockPos(pos.getX()+2,pos.getY()+2,pos.getZ());
+                    posDOWN2 = new BlockPos(pos.getX()-2,pos.getY()-2,pos.getZ());
                 }
                 else if(state.getValue(FACING).getName().equals("west"))
                 {
                     west = true;
                     posUP = new BlockPos(pos.getX()-1,pos.getY()+1,pos.getZ());
                     posDOWN = new BlockPos(pos.getX()+1,pos.getY()-1,pos.getZ());
+
+                    posUP2 = new BlockPos(pos.getX()-2,pos.getY()+2,pos.getZ());
+                    posDOWN2 = new BlockPos(pos.getX()+2,pos.getY()-2,pos.getZ());
                 }
 
                BlockPos posL;
@@ -148,10 +162,11 @@ public class ClickLadderEvent
 
 
 
-               if(world.getBlockState(posUP).getBlock().is(BlockTags.STAIRS) & world.getBlockState(posDOWN).getBlock().is(BlockTags.STAIRS))
+               if((world.getBlockState(posUP).getBlock().is(BlockTags.STAIRS) && world.getBlockState(posUP2).getBlock().is(BlockTags.STAIRS))
+                       & (world.getBlockState(posDOWN).getBlock().is(BlockTags.STAIRS) && world.getBlockState(posDOWN2).getBlock().is(BlockTags.STAIRS)))
                    return;
 
-               if(world.getBlockState(posUP).getBlock().is(BlockTags.STAIRS))
+               if(world.getBlockState(posUP).getBlock().is(BlockTags.STAIRS) & world.getBlockState(posUP2).getBlock().is(BlockTags.STAIRS))
                {
                    up = true;
                    posL = posUP;
