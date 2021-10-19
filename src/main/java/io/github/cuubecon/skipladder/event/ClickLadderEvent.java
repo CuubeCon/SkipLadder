@@ -5,10 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
+import net.minecraft.item.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -285,6 +282,10 @@ public class ClickLadderEvent
         if(item instanceof BlockItem)
             is_invalid = true;
         else if(item instanceof PotionItem)
+            is_invalid = true;
+        else if(item instanceof EnderPearlItem)
+            is_invalid = true;
+        else if(item instanceof SnowballItem)
             is_invalid = true;
 
         return is_invalid;
