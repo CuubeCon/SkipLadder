@@ -3,7 +3,6 @@ package io.github.cuubecon.skipladder.event;
 import io.github.cuubecon.skipladder.config.SkipLadderConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.LadderBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -226,15 +225,15 @@ public class ClickLadderEvent
      * @param counter Distance in blocks, needed to calculate foodlevel amount to remove
      */
     private static void teleportPlayer(World world, PlayerEntity player, int foodLevel, BlockPos posL, int counter) {
-        if(counter > 150)
-            counter = 150;
+        if(counter > SkipLadderConfig.max_amount.get())
+            counter = SkipLadderConfig.max_amount.get();
 
-        int fooddecrease = (counter /10);
+        int fooddecrease = (counter / SkipLadderConfig.hunger_amount.get());
 
         if(fooddecrease >= foodLevel)
-            fooddecrease = foodLevel -2;
+            fooddecrease = foodLevel - 2;
 
-        if(fooddecrease <=0)
+        if(fooddecrease <= 0)
             fooddecrease = 1;
 
         Vector3d targetblock = findSafeTeleportLocation(world, posL);
@@ -281,11 +280,13 @@ public class ClickLadderEvent
      */
     private static boolean isInvalidItem(Item item)
     {
-        boolean test = false;
+        boolean is_invalid = false;
+
         if(item instanceof BlockItem)
-            test = true;
+            is_invalid = true;
         else if(item instanceof PotionItem)
-            test = true;
-        return test;
+            is_invalid = true;
+
+        return is_invalid;
     }
 }
