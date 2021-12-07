@@ -106,7 +106,7 @@ public class ClickLadderEvent
                }
                teleportPlayer(world, player, foodLevel, posL, counter);
            }
-           else if(world.getBlockState(pos).getBlock().equals(BlockTags.STAIRS))
+           else if(world.getBlockState(pos).getBlock().equals(BlockTags.STAIRS) && SkipLadderConfig.skip_stairs.get())
            {
 
                BlockState state = world.getBlockState(pos);
