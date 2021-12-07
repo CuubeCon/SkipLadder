@@ -1,12 +1,18 @@
 package io.github.cuubecon.skipladder.event;
 
 import io.github.cuubecon.skipladder.config.SkipLadderConfig;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.TransportationHelper;
@@ -15,11 +21,14 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.ICollisionReader;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 import static net.minecraft.block.HorizontalBlock.FACING;
 
@@ -106,7 +115,7 @@ public class ClickLadderEvent
                }
                teleportPlayer(world, player, foodLevel, posL, counter);
            }
-           else if(world.getBlockState(pos).getBlock().is(BlockTags.STAIRS))
+           else if(world.getBlockState(pos).getBlock().is(BlockTags.STAIRS) & SkipLadderConfig.skip_stairs.get())
            {
 
                BlockState state = world.getBlockState(pos);
