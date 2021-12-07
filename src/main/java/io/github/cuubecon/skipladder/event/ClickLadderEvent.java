@@ -90,7 +90,7 @@ public class ClickLadderEvent implements UseBlockCallback {
                 }
                 teleportPlayer(world, player, foodLevel, posL, counter);
             }
-            else if(world.getBlockState(pos).getBlock().equals(BlockTags.STAIRS))
+            else if(world.getBlockState(pos).getBlock().equals(BlockTags.STAIRS) && SkipLadderConfig.SKIP_STAIRS)
             {
 
                 BlockState state = world.getBlockState(pos);

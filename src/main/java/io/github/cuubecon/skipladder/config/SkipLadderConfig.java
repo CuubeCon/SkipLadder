@@ -11,6 +11,7 @@ public class SkipLadderConfig
     private static ModConfigProvider configs;
     public static boolean REMOVE_HUNGER;
     public static boolean PLAY_TELEPORTSOUND;
+    public static boolean SKIP_STAIRS;
 
     public static void registerConfigs() {
         configs = new ModConfigProvider();
@@ -26,6 +27,7 @@ public class SkipLadderConfig
         configs.addKeyValuePair(new Pair<>("max-amount", 150), "The max amount of remove hunger devide hunger amount. If divider = max amount, teleportation always cots 1 hungerlevel (0.5).");
         configs.addKeyValuePair(new Pair<>("remove-hunger", true), "Should teleport cost hunger.");
         configs.addKeyValuePair(new Pair<>("play-teleportsound", true), "Should play sound on teleport.");
+        configs.addKeyValuePair(new Pair<>("skip-stairs", true), "Should play sound on teleport.");
     }
 
     private static void assignConfigs() {
@@ -34,6 +36,7 @@ public class SkipLadderConfig
         MAX_AMOUNT = CONFIG.getOrDefault( "max-amount", 150 );
         REMOVE_HUNGER = CONFIG.getOrDefault( "remove-hunger", true );
         PLAY_TELEPORTSOUND = CONFIG.getOrDefault( "play-teleportsound", true );
+        SKIP_STAIRS = CONFIG.getOrDefault( "skip-stairs", true );
 
         System.out.println("All " + configs.getConfigsList().size() + " have been set properly");
     }

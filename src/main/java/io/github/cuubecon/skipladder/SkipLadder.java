@@ -3,9 +3,7 @@ package io.github.cuubecon.skipladder;
 import io.github.cuubecon.skipladder.config.SkipLadderConfig;
 import io.github.cuubecon.skipladder.event.ClickLadderEvent;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
